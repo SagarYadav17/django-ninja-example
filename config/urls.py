@@ -1,9 +1,14 @@
 from django.contrib import admin
 from django.urls import path
-from authentication.views import api as auth_api
 
+from ninja import NinjaAPI
+
+api = NinjaAPI()
+
+
+api.add_router("auth", "authentication.views.router")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/auth/", auth_api.urls),
+    path("api/", api.urls),
 ]
