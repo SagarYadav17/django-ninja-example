@@ -19,13 +19,13 @@ router = Router()
 default_response = {codes_2xx: dict, codes_4xx: dict}
 
 
-@router.post("/register", response=default_response)
+@router.post("/register/", response=default_response)
 def register_user(request, data: RegisterUserSchema):
     User.objects.create_user(**data.dict())
     return {"message": "User created"}
 
 
-@router.post("/login", response=default_response)
+@router.post("/login/", response=default_response)
 async def login(request, data: LoginUserSchema):
     with suppress(User.DoesNotExist):
         user = await User.objects.aget(email=data.email)
@@ -35,12 +35,12 @@ async def login(request, data: LoginUserSchema):
     return 401, {"message": "Invalid credentials"}
 
 
-@router.get("/users", auth=AuthBearer(), response=List[UsersOut])
+@router.get("/users/", auth=AuthBearer(), response=List[UsersOut])
 async def list_users(request):
     users = await sync_to_async(list)(User.objects.all())
     return users
 
 
-@router.get("/user/me", auth=AuthBearer(), response=UsersOut)
+@router.get("/user/me/", auth=AuthBearer(), response=UsersOut)
 async def get_me(request):
-    return request.user
+    return await User.objects.aget(id=request.user.id)

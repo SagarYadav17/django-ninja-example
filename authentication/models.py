@@ -8,6 +8,7 @@ from django.contrib.auth.models import (
     BaseUserManager,
     PermissionsMixin,
 )
+from django.conf import settings
 
 
 class TimestampedModel(models.Model):
@@ -91,11 +92,10 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
     def token(self):
         payload = {
             "id": str(self.id),
-            "email": self.email,
             "exp": timezone.now() + timezone.timedelta(days=1),
         }
         return jwt.encode(
             payload=payload,
-            key="secret",
+            key=settings.SECRET_KEY,
             algorithm="HS256",
         )

@@ -1,6 +1,5 @@
 from ninja.security import HttpBearer
 from ninja.errors import HttpError
-from authentication.models import User
 import jwt
 
 
@@ -11,9 +10,6 @@ class AuthBearer(HttpBearer):
         except jwt.PyJWTError:
             raise HttpError(403, "Invalid token")
 
-        request.user = await User.objects.aget(
-            id=payload["id"],
-            email=payload["email"],
-        )
+        request.user.id = payload["id"]
 
         return token

@@ -24,7 +24,7 @@ class RegisterUserSchema(ModelSchema):
 class UsersOut(Schema):
     id: UUID
     email: EmailStr
-    name: str
+    name: str | None
     is_superuser: bool
     is_staff: bool
 

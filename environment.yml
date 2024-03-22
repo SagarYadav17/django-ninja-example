@@ -1,5 +1,0 @@
-name: ninja
-channels:
-  - defaults
-dependencies:
-  - python=3.12
